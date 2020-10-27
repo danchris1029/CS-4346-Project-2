@@ -2,6 +2,13 @@
 #include <vector>
 using namespace std;
 
+int main() {
+
+	vector<int> = { 0, 2, 1, 1, 0, 0, 1, 2, 0 };
+
+	return 0;
+}
+
 // only generate the nodes that would have atleast one winning line with a changed position
 // return best score
 int minimaxAB(vector<int> currentState, int depth, int player, int useThresh, int passThresh) {
@@ -36,6 +43,9 @@ vector<int> createNewState(vector<int> currentState) {
 	return newState;
 }
 
+
+// currentState will have 9 values that make up the tic-tac-toe table starting from left to right, 
+// and then we move to the next row for every 3 positions
 // return evalution score with heuristic function one
 int evalOne(vector<int> currentState, int depth) {
 	int evalScore;
