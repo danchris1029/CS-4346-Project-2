@@ -3,32 +3,44 @@
 using namespace std;
 
 // only generate the nodes that would have atleast one winning line with a changed position
-// return game tree
-ListNode generateGameTree(vector<int> currentState, int depth) {
-	vector<int, int> rows = { {currentState[0], currentState[1], currentState[2]},
-							{currentState[3], currentState[4], currentState[5]},
-							{currentState[6], currentState[7], currentState[8]} };
-
-	vector<int, int> cols = { {currentState[0], currentState[3], currentState[6]},
-								{currentState[1], currentState[4], currentState[7]},
-								{currentState[2], currentState[5], currentState[8]} };
-
-	vector<int, int> diags = { {currentState[0], currentState[4], currentState[8]},
-								{currentState[2], currentState[4], currentState[6]} };
-
+// return best score
+int minimaxAB(vector<int> currentState, int depth, int player, int useThresh, int passThresh) {
+	int bestScore;
+	int resultSucc;
+	vector<int> newState;
+	if (depth > 3)
+		return evalOne(currentState, depth);
 	
+	for (int i = 0; i < 3; i++) {
+		newState = createNewState(currentState);
+		if (newState) {
+			resultSucc = minimaxAB(newState, depth+1, pos, opposite(player), -useThresh, -passThresh)
+				// finish b, c, and d
+		}
+	}
 
-	ListNode head;
-
-	return head;
+	return bestScore;
 }
 
+int opposite(int player) {
+	if (player)
+		return 0;
+	else
+		return 1;
+}
 
-// return evalution score
-vector<int> evalOne(vector<int> currentState, int depth) {
-	vector<int> gameTree;
+// create the next state in a game from a previous state
+vector<int> createNewState(vector<int> currentState) {
+	vector<int> newState;
+
+	return newState;
+}
+
+// return evalution score with heuristic function one
+int evalOne(vector<int> currentState, int depth) {
+	int evalScore;
 
 
 
-	return gameTree;
+	return int;
 }
