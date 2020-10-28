@@ -4,7 +4,7 @@ using namespace std;
 
 int main() {
 
-	vector<int> = { 0, 2, 1, 1, 0, 0, 1, 2, 0 };
+	vector<int> currentState = { 0, 2, 1, 1, 0, 0, 1, 2, 0 };
 
 	return 0;
 }
