@@ -47,11 +47,29 @@ vector<int> createNewState(vector<int> currentState) {
 // currentState will have 9 values that make up the tic-tac-toe table starting from left to right, 
 // and then we move to the next row for every 3 positions
 // return evalution score with heuristic function one
-int evalOne(vector<int> currentState, int depth) {
-	int evalScore;
-
-
-
-	return int;
+int evalOne(vector<int> currentState, int player){
+	int score = 0;
+	
+	// Check rows and colomns
+	for(int i = 0; i < 3; i++){
+		//rows
+		if(currentState[i*3] != (-player) && currentState[(i*3)+1] != (-player)
+			currentState[(i*3)+2] != (-player))
+			score++;
+		//colomns
+		if(currentState[i] != (-player) && currentState[i+3] != (-player)
+			currentState[i+6] != (-player))
+			score++;
+	}
+	
+	// Check diagonals
+	for(int i = 0; i < 2; i++){
+		//rows
+		if(currentState[0+(i*2)] != (-player) && currentState[4] != (-player)
+			currentState[8-(i*2)] != (-player))
+			score++;
+	}
+	
+	return score;
 }
 
