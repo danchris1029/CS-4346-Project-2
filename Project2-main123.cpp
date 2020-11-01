@@ -2,8 +2,9 @@
 #include <vector>
 using namespace std;
 
+// X = 1
+// O = -1
 int main() {
-
 	vector<int> currentState = { 0, -1, 1, -1, 0, 0, 1, -1, 0 };
 
 	return 0;
