@@ -44,65 +44,64 @@ vector<int> createNewState(vector<int> currentState) {
 	return newState;
 }
 
-int evalOne(vector<int> currentState, int player){
+// first players winning path - opposing players winning paths
+int firstMinusOpp(vector<int> currentState, int player) {
 	int score = 0;
 	int player1 = 0;
 	int player2 = 0;
-	
-	
+
+
 	// Check rows and colomns
-	for(int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		//rows
-		if(currentState[i*3] != (-player) && currentState[(i*3)+1] != (-player)
-			currentState[(i*3)+2] != (-player))
+		if (currentState[i * 3] != (-player) && currentState[(i * 3) + 1] != (-player) &&
+			currentState[(i * 3) + 2] != (-player))
 			player1++;
 		//colomns
-		if(currentState[i] != (-player) && currentState[i+3] != (-player)
-			currentState[i+6] != (-player))
+		if (currentState[i] != (-player) && currentState[i + 3] != (-player) &&
+			currentState[i + 6] != (-player))
 			player1++;
 	}
-	
+
 	// Check diagonals
-	for(int i = 0; i < 2; i++){
+	for (int i = 0; i < 2; i++) {
 		//rows
-		if(currentState[0+(i*2)] != (-player) && currentState[4] != (-player)
-			currentState[8-(i*2)] != (-player))
+		if (currentState[0 + (i * 2)] != (-player) && currentState[4] != (-player) &&
+			currentState[8 - (i * 2)] != (-player))
 			player1++;
 	}
-	
+
 	// Check rows and colomns
-	for(int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		//rows 
-		if(currentState[i*3] != (player) && currentState[(i*3)+1] != (player)
-			currentState[(i*3)+2] != (player))
+		if (currentState[i * 3] != (player) && currentState[(i * 3) + 1] != (player) &&
+			currentState[(i * 3) + 2] != (player))
 			player2++;
 		//colomns
-		if(currentState[i] != (player) && currentState[i+3] != (player)
-			currentState[i+6] != (player))
+		if (currentState[i] != (player) && currentState[i + 3] != (player) &&
+			currentState[i + 6] != (player))
 			player2++;
 	}
-	
+
 	// Check diagonals
-	for(int i = 0; i < 2; i++){
+	for (int i = 0; i < 2; i++) {
 		//rows
-		if(currentState[0+(i*2)] != (player) && currentState[4] != (player)
-			currentState[8-(i*2)] != (player))
+		if (currentState[0 + (i * 2)] != (player) && currentState[4] != (player) &&
+			currentState[8 - (i * 2)] != (player))
 			player2++;
 	}
-	
+
 	return player1 - player2;
 }
 
 
-// currentState will have 9 values that make up the tic-tac-toe table starting from left to right, 
-// and then we move to the next row for every 3 positions
-// return evalution score with heuristic function one
-int cornAndMid(vector<int> currentState, int player){
+// Add a point for every player's piece in any of the corners or mid position.
+int cornAndMid(vector<int> currentState, int player) {
 	int score = 0;
 
 	// Check rows and colomns	
-	for(int i = 0; i <= 8; i = i + 2){
-		if(currentState[i] == player){
+	for (int i = 0; i <= 8; i = i + 2) {
+		if (currentState[i] == player) {
 			score++;
 		}
 	}
