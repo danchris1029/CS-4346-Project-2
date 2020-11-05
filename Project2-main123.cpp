@@ -37,11 +37,18 @@ int opposite(int player) {
 		return 1;
 }
 
-// create the next state in a game from a previous state
-vector<int> createNewState(vector<int> currentState) {
-	vector<int> newState;
-
-	return newState;
+// G(currentState, player) --> listStates
+// Return a list of states that can be taken by current player
+vector<int, int> createNewState(vector<int> currentState, int player) {
+	vector<int, int> listStates;
+	// get number of empty positions (0) --> numEmpty
+	
+	// for i = 0; i < numEmpty do
+		// create copy of currentState --> newState
+		// Insert player into newState[numEmptyPos(i)] --> newState
+		// push newState into listStates (listStates.push(newStates))
+	
+	return listStates;
 }
 
 // first players winning path - opposing players winning paths
