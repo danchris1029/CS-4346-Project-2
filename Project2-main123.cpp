@@ -139,30 +139,29 @@ int cornAndMid(vector<int> currentState, int player) {
 	return score;
 }
 
-
 // Determines the objects positined above each player.
-int proximityEval(vector<int> currentState, int player){
-    int scorePlayer = 0;
-    int scoreOtherPlayer = 0;
-    
-    // Checking proximity of values above each player
-    for(int index = 3; index < 9; index++){
-        if (currentstate[index] == player && currentstate[index - 3] == player)
-            scorePlayer += 2;
-        else if (currentstate[index] == player && currentstate[index - 3] == -player)
-            scorePlayer -= 1;
-    }
-    
-    // Checking proximity of values above each other player
-    for(int index = 3; index < 9; index++){
-        if (currentstate[index] == -player && currentstate[index - 3] == -player)
-            scoreOtherPlayer += 2;
-        else if (currentstate[index] == -player && currentstate[index - 3] == player)
-            scoreOtherPlayer -= 1;
-    }
-    
-    return(scorePlayer - scoreOtherPlayer);
-    
+int proximityEval(vector<int> currentState, int player) {
+	int scorePlayer = 0;
+	int scoreOtherPlayer = 0;
+
+	// Checking proximity of values above each player
+	for (int index = 3; index < 9; index++) {
+		if (currentState[index] == player && currentState[index - 3] == player)
+			scorePlayer += 2;
+		else if (currentState[index] == player && currentState[index - 3] == -player)
+			scorePlayer -= 1;
+	}
+
+	// Checking proximity of values above each other player
+	for (int index = 3; index < 9; index++) {
+		if (currentState[index] == -player && currentState[index - 3] == -player)
+			scoreOtherPlayer += 2;
+		else if (currentState[index] == -player && currentState[index - 3] == player)
+			scoreOtherPlayer -= 1;
+	}
+
+	return(scorePlayer - scoreOtherPlayer);
+
 }
 
 int evalTie(vector<int> currentState, int player) {
