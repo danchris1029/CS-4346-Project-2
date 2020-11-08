@@ -14,7 +14,7 @@ C. Check if the ply is empty
 		end
 	if not empty (4.):
 		transverse through list of created nodes --> currentNode
-			resultSucc = minmaxab(currentNode, depth+1, opposite(player), -passThresh, -useThresh, int *lastNodeNumber, int currentNodeNumber) (a.)
+			resultSucc = minmaxab(currentNode, depth+1, opposite(player), -passThresh, -useThresh, int *lastNodeNumber) (a.)
 			newValue = -resultSucc (b.)
 			if (NEW-VALUE> Pass-Thresh) (c.)
 				Set Pass-Thresh to NEW-VALUE.
