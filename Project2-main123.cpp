@@ -165,25 +165,24 @@ int proximityEval(vector<int> currentState, int player){
     
 }
 
-int evalTie(vector<int> currentState, int player){
+int evalTie(vector<int> currentState, int player) {
 	int score = 0;
-	
-	for(int i = 0; i<3; i++){
-		if(currentState[i*3] == player && currentState[(i*3)+1] == player && currentState[(i*3)+2] == (-player))
+
+	for (int i = 0; i < 3; i++) {
+		if (currentState[i * 3] == player && currentState[(i * 3) + 1] == player && currentState[(i * 3) + 2] == (-player))
 			score++;
-		else if(currentState[i*3] == (-player) && currentState[(i*3)+1] == player && currentState[(i*3)+2] == player)
+		else if (currentState[i * 3] == (-player) && currentState[(i * 3) + 1] == player && currentState[(i * 3) + 2] == player)
 			score++;
-		else if(currentState[i*3] == player && currentState[(i*3)+1] == (-player) && currentState[(i*3)+2] == player)
+		else if (currentState[i * 3] == player && currentState[(i * 3) + 1] == (-player) && currentState[(i * 3) + 2] == player)
 			score++;
-			
-		if(currentState[i] == player && currentState[i+1] == player && currentState[i+2] == (-player))
+
+		if (currentState[i] == player && currentState[i + 1] == player && currentState[i + 2] == (-player))
 			score++;
-		else if(currentState[i] == (-player) && currentState[i+1] == player && currentState[i+2] == player)
+		else if (currentState[i] == (-player) && currentState[i + 1] == player && currentState[i + 2] == player)
 			score++;
-		else if(currentState[i] == player && currentState[i+1] == (-player) && currentState[i+2] == player)
+		else if (currentState[i] == player && currentState[i + 1] == (-player) && currentState[i + 2] == player)
 			score++;
 	}
-	
 	return score;
 }
  // -1 = O
