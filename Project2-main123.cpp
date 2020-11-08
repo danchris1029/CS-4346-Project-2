@@ -30,78 +30,81 @@ int minimaxAB(vector<int> currentState, int depth, int player, int useThresh, in
 }
 
 int opposite(int player) {
-	if (player)
-		return 0;
-	else
-		return 1;
+    return -player;
 }
 
-// create the next state in a game from a previous state
-vector<int> createNewState(vector<int> currentState) {
-	vector<int> newState;
-
-	return newState;
+// G(currentState, player) --> listStates
+// Return a list of states that can be taken by current player
+vector<int, int> createNewState(vector<int> currentState, int player) {
+	vector<int, int> listStates;
+	// get number of empty positions (0) --> numEmpty
+	
+	// for i = 0; i < numEmpty do
+		// create copy of currentState --> newState
+		// Insert player into newState[numEmptyPos(i)] --> newState
+		// push newState into listStates (listStates.push(newStates))
+	
+	return listStates;
 }
 
-int evalOne(vector<int> currentState, int player){
+// first players winning path - opposing players winning paths
+int firstMinusOpp(vector<int> currentState, int player) {
 	int score = 0;
 	int player1 = 0;
 	int player2 = 0;
-	
-	
+
+
 	// Check rows and colomns
-	for(int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		//rows
-		if(currentState[i*3] != (-player) && currentState[(i*3)+1] != (-player)
-			currentState[(i*3)+2] != (-player))
+		if (currentState[i * 3] != (-player) && currentState[(i * 3) + 1] != (-player) &&
+			currentState[(i * 3) + 2] != (-player))
 			player1++;
 		//colomns
-		if(currentState[i] != (-player) && currentState[i+3] != (-player)
-			currentState[i+6] != (-player))
+		if (currentState[i] != (-player) && currentState[i + 3] != (-player) &&
+			currentState[i + 6] != (-player))
 			player1++;
 	}
-	
+
 	// Check diagonals
-	for(int i = 0; i < 2; i++){
+	for (int i = 0; i < 2; i++) {
 		//rows
-		if(currentState[0+(i*2)] != (-player) && currentState[4] != (-player)
-			currentState[8-(i*2)] != (-player))
+		if (currentState[0 + (i * 2)] != (-player) && currentState[4] != (-player) &&
+			currentState[8 - (i * 2)] != (-player))
 			player1++;
 	}
-	
+
 	// Check rows and colomns
-	for(int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		//rows 
-		if(currentState[i*3] != (player) && currentState[(i*3)+1] != (player)
-			currentState[(i*3)+2] != (player))
+		if (currentState[i * 3] != (player) && currentState[(i * 3) + 1] != (player) &&
+			currentState[(i * 3) + 2] != (player))
 			player2++;
 		//colomns
-		if(currentState[i] != (player) && currentState[i+3] != (player)
-			currentState[i+6] != (player))
+		if (currentState[i] != (player) && currentState[i + 3] != (player) &&
+			currentState[i + 6] != (player))
 			player2++;
 	}
-	
+
 	// Check diagonals
-	for(int i = 0; i < 2; i++){
+	for (int i = 0; i < 2; i++) {
 		//rows
-		if(currentState[0+(i*2)] != (player) && currentState[4] != (player)
-			currentState[8-(i*2)] != (player))
+		if (currentState[0 + (i * 2)] != (player) && currentState[4] != (player) &&
+			currentState[8 - (i * 2)] != (player))
 			player2++;
 	}
-	
+
 	return player1 - player2;
 }
 
 
-// currentState will have 9 values that make up the tic-tac-toe table starting from left to right, 
-// and then we move to the next row for every 3 positions
-// return evalution score with heuristic function one
-int cornAndMid(vector<int> currentState, int player){
+// Add a point for every player's piece in any of the corners or mid position.
+int cornAndMid(vector<int> currentState, int player) {
 	int score = 0;
 
 	// Check rows and colomns	
-	for(int i = 0; i <= 8; i = i + 2){
-		if(currentState[i] == player){
+	for (int i = 0; i <= 8; i = i + 2) {
+		if (currentState[i] == player) {
 			score++;
 		}
 	}
@@ -109,3 +112,52 @@ int cornAndMid(vector<int> currentState, int player){
 	return score;
 }
 
+
+// Determines the objects positined above each player.
+int proximityEval(vector<int> currentState, int player){
+    int scorePlayer = 0;
+    int scoreOtherPlayer = 0;
+    
+    // Checking proximity of values above each player
+    for(int index = 3; index < 9; index++){
+        if (currentstate[index] == player && currentstate[index - 3] == player)
+            scorePlayer += 2;
+        else if (currentstate[index] == player && currentstate[index - 3] == -player)
+            scorePlayer -= 1;
+    }
+    
+    // Checking proximity of values above each other player
+    for(int index = 3; index < 9; index++){
+        if (currentstate[index] == -player && currentstate[index - 3] == -player)
+            scoreOtherPlayer += 2;
+        else if (currentstate[index] == -player && currentstate[index - 3] == player)
+            scoreOtherPlayer -= 1;
+    }
+    
+    return(scorePlayer - scoreOtherPlayer);
+    
+}
+
+int evalTie(vector<int> currentState, int player){
+	int score = 0;
+	
+	for(int i = 0; i<3; i++){
+		if(currentState[i*3] == player && currentState[(i*3)+1] == player && currentState[(i*3)+2] == (-player))
+			score++;
+		else if(currentState[i*3] == (-player) && currentState[(i*3)+1] == player && currentState[(i*3)+2] == player)
+			score++;
+		else if(currentState[i*3] == player && currentState[(i*3)+1] == (-player) && currentState[(i*3)+2] == player)
+			score++;
+			
+		if(currentState[i] == player && currentState[i+1] == player && currentState[i+2] == (-player))
+			score++;
+		else if(currentState[i] == (-player) && currentState[i+1] == player && currentState[i+2] == player)
+			score++;
+		else if(currentState[i] == player && currentState[i+1] == (-player) && currentState[i+2] == player)
+			score++;
+	}
+	
+	return score;
+}
+ // -1 = O
+ // 1 = X
