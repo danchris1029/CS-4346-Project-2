@@ -31,10 +31,7 @@ int minimaxAB(vector<int> currentState, int depth, int player, int useThresh, in
 }
 
 int opposite(int player) {
-	if (player)
-		return 0;
-	else
-		return 1;
+    return -player;
 }
 
 // G(currentState, player) --> listStates
@@ -116,20 +113,26 @@ int cornAndMid(vector<int> currentState, int player) {
 	return score;
 }
 
+
+// Determines the objects positined above each player.
 int proximityEval(vector<int> currentState, int player){
     int scorePlayer = 0;
     int scoreOtherPlayer = 0;
     
     // Checking proximity of values above each player
     for(int index = 3; index < 9; index++){
-        if (currentstate[index - 3] == player && currentstate[index - 3] == (-player))
+        if (currentstate[index] == player && currentstate[index - 3] == player)
             scorePlayer += 2;
+        else if (currentstate[index] == player && currentstate[index - 3] == -player)
+            scorePlayer -= 1;
     }
     
     // Checking proximity of values above each other player
     for(int index = 3; index < 9; index++){
-        if (currentstate[index - 3] == (-player) && currentstate[index - 3] == player)
+        if (currentstate[index] == -player && currentstate[index - 3] == -player)
             scoreOtherPlayer += 2;
+        else if (currentstate[index] == -player && currentstate[index - 3] == player)
+            scoreOtherPlayer -= 1;
     }
     
     return(scorePlayer - scoreOtherPlayer);
