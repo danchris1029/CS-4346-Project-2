@@ -2,6 +2,32 @@
 #include <vector>
 using namespace std;
 
+
+/*
+A. If deepenough(1.)
+	return value
+B. Generate ply (2.)
+C. Check if the ply is empty 
+	if empty (3.):
+		establish alpha beta
+		evaluate currentState
+		end
+	if not empty (4.):
+		transverse through list of created nodes --> currentNode
+			resultSucc = minmaxab(currentNode, depth+1, opposite(player), -passThresh, -useThresh, int *lastNodeNumber, int currentNodeNumber) (a.)
+			newValue = -resultSucc (b.)
+			if (NEW-VALUE> Pass-Thresh) (c.)
+				Set Pass-Thresh to NEW-VALUE.
+				set best-path
+			if (pass-thresh>=use-thresh)(d.)
+				VALUE= Pass-Thresh;
+				PATH= BEST-PATH;
+	(5.)
+	Return the structure 
+	VALUE = Pass-Thresh 
+	PATH = BEST-PATH
+*/
+
 // X = 1
 // O = -1
 int main() {
