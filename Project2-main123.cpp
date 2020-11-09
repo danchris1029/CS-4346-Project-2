@@ -7,9 +7,8 @@ using namespace std;
 A. If deepenough(1.)
 	return value
 B. Generate ply (2.)
-C. Check if the ply is empty 
+C. Check if the ply is empty
 	if empty (3.):
-		establish alpha beta
 		evaluate currentState
 		end
 	if not empty (4.):
@@ -20,12 +19,13 @@ C. Check if the ply is empty
 				Set Pass-Thresh to NEW-VALUE.
 				set best-path
 			if (pass-thresh>=use-thresh)(d.)
-				VALUE= Pass-Thresh;
-				PATH= BEST-PATH;
-	(5.)
-	Return the structure 
-	VALUE = Pass-Thresh 
-	PATH = BEST-PATH
+				return the structure
+					VALUE= Pass-Thresh;
+					PATH= BEST-PATH;
+
+D.	Return the structure (5.)
+		VALUE = Pass-Thresh
+		PATH = BEST-PATH
 */
 
 // X = 1
@@ -37,16 +37,35 @@ int main() {
 }
 
 // only generate the nodes that would have atleast one winning line with a changed position
-// return best score
-int minimaxAB(vector<int> currentState, int depth, int player, int useThresh, int passThresh) {
-	int bestScore;
-	int resultSucc;
-	vector<int> newState;
-	if (depth > 3)
-		return evalOne(currentState, depth);
+// return length of the game path
+// return total number of nodes generated
+// return total number of nodes expanded
+int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum) {
+	int bestScore,
+	    resultSucc,
+		lengthGamePath,
+		totalNumberNodes,
+		totalExpandedNodes;
+	int table[4];
+	vector<int, int> listStates;
 
-	for (int i = 0; i < 3; i++) {
-		newState = createNewState(currentState);
+	if (depth > 9){
+		if (evalNum == 1)
+			return firstMinusOpp(currentState, depth);
+		if (evalNum == 2)
+			return cornAndMid(currentState, depth);
+		if (evalNum == 3)
+			return proximityEval(currentState, depth);
+		if (evalNum == 4)
+			return evalTie(currentState, depth);
+	}
+		
+
+	listStates = createNewState(currentState, currentPlayer);
+	if(listStates.size() == 0)
+		return 
+	for (int i = 0; i < listStates.size(); i++) {
+		
 		if (newState) {
 			resultSucc = minimaxAB(newState, depth + 1, pos, opposite(player), -useThresh, -passThresh)
 				// finish b, c, and d
