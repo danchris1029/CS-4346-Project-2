@@ -19,10 +19,28 @@ int minimaxAB(vector<int> currentState, int depth, int player, int useThresh, in
 		return evalOne(currentState, depth);
 
 	for (int i = 0; i < 3; i++) {
-		newState = createNewState(currentState);
+		newState = createNewState(currentState, player);
 		if (newState) {
-			resultSucc = minimaxAB(newState, depth + 1, pos, opposite(player), -useThresh, -passThresh)
+			resultSucc = minimaxAB(newState, depth + 1, pos, opposite(player), -useThresh, -passThresh);
 				// finish b, c, and d
+				
+				//b (set newState to -resultSucc)
+				newState[i] = -resultSucc;
+				
+				//c
+				if(newState[i] > passThresh){
+					//i
+					passThresh = newState[i];
+					//ii
+					//set bestpath to result of attching succ to front of path(result succ)
+					bestScore = resultSucc;
+				}
+				
+				//d
+				if(passThresh >= useThresh)
+					return bestScore;
+				
+				
 		}
 	}
 
@@ -138,6 +156,7 @@ int proximityEval(vector<int> currentState, int player){
     
 }
 
+// Checks for all possible tie conditions present on the board
 int evalTie(vector<int> currentState, int player){
 	int score = 0;
 	
