@@ -43,9 +43,9 @@ int main() {
 int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum) {
 	int bestScore,
 	    resultSucc,
-		lengthGamePath,
-		totalNumberNodes,
-		totalExpandedNodes;
+	    lengthGamePath,
+	    totalNumberNodes,
+            totalExpandedNodes;
 	int table[4];
 	vector<int, int> listStates;
 
@@ -65,10 +65,25 @@ int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThr
 	if(listStates.size() == 0)
 		return 
 	for (int i = 0; i < listStates.size(); i++) {
-		
-		if (newState) {
-			resultSucc = minimaxAB(newState, depth + 1, pos, opposite(player), -useThresh, -passThresh)
-				// finish b, c, and d
+		if (listStates) {
+			resultSucc = minimaxAB(newState, depth + 1, pos, opposite(player), -passThresh, -useThresh)
+				
+				//b (set newState to -resultSucc)
+				newState[i] = -resultSucc;
+				
+				//c
+				if(newState[i] > passThresh){
+					//i
+					passThresh = listStates[i];
+					//ii
+					//set bestpath to result of attching succ to front of path(result succ)
+					bestScore = resultSucc;
+				}
+				
+				//d
+				if(passThresh >= useThresh)
+					return bestScore;
+				
 		}
 	}
 
