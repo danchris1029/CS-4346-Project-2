@@ -63,8 +63,16 @@ int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThr
 
 
 	listStates = createNewState(currentState, currentPlayer);
-	if (listStates.size() == 0)
-		return bestScore;
+	if (listStates.size() == 0) {
+		if (evalNum == 1)
+			return firstMinusOpp(currentState, depth);
+		if (evalNum == 2)
+			return cornAndMid(currentState, depth);
+		if (evalNum == 3)
+			return proximityEval(currentState, depth);
+		if (evalNum == 4)
+			return evalTie(currentState, depth);
+	}
 	for (int i = 0; i < listStates.size(); i++) {
 		newState = listStates.at(i);
 
