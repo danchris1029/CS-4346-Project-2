@@ -45,7 +45,7 @@ int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThr
 	    resultSucc,
 	    lengthGamePath,
 	    totalNumberNodes,
-            totalExpandedNodes;
+        totalExpandedNodes;
 	int table[4];
 	vector<int, int> listStates;
 
