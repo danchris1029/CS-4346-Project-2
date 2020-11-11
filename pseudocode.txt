@@ -1,0 +1,32 @@
+
+
+
+-
+	vector<int, int> createNewState 
+		recieves
+			- vector<int> currentState
+				- represents the current state of the tic-tac-toe game board
+			- int player
+				- possible values: -1, 1
+					- -1 = O
+					- 1 = X
+				- represents the current player
+			- Called from
+				- minmaxAB()
+					- returns to listStates vector<int, int>
+		- algorithm
+			- Local variables	
+				- vector<int, int> listStates
+				- vector<int> emptyPos 
+				- vector<int> moveState
+			- get positions of 0's in currentState vector<int> --> emptyPos
+				- iterate through the currentState vector<int> 
+			 		- when currentState[i] is equal to 0, push in i <int>
+			- for each element in emptyPos
+				- set moveState to currentState vector<int>
+				- set moveState[emptyPos[i]] vector<int> to player <int>
+				- push moveState vector<int> into listStates vector<int, int>
+			
+			- return listStates
+						
+		
