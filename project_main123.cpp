@@ -2,7 +2,6 @@
 #include <vector>
 using namespace std;
 
-
 /*
 A. If deepenough(1.)
 	return value
@@ -28,13 +27,13 @@ D.	Return the structure (5.)
 		PATH = BEST-PATH
 */
 
-// X = 1
-// O = -1
-int main() {
-	vector<int> currentState = { 0, -1, 1, -1, 0, 0, 1, -1, 0 };
-
-	return 0;
-}
+int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum);
+vector<vector<int>, int> createNewState(vector<int> currentState, int player);
+int opposite(int player);
+int firstMinusOpp(vector<int> currentState, int player);
+int cornAndMid(vector<int> currentState, int player);
+int proximityEval(vector<int> currentState, int player);
+int evalTie(vector<int> currentState, int player);
 
 // only generate the nodes that would have atleast one winning line with a changed position
 // return length of the game path
@@ -42,14 +41,16 @@ int main() {
 // return total number of nodes expanded
 int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum) {
 	int bestScore,
-	    resultSucc,
-	    lengthGamePath,
-	    totalNumberNodes,
-            totalExpandedNodes;
+		resultSucc,
+		lengthGamePath,
+		totalNumberNodes,
+		totalExpandedNodes,
+		newValue;
+	vector<int> newState;
 	int table[4];
-	vector<int, int> listStates;
+	vector<vector<int>, int> listStates;
 
-	if (depth > 9){
+	if (depth > 9) {
 		if (evalNum == 1)
 			return firstMinusOpp(currentState, depth);
 		if (evalNum == 2)
@@ -59,52 +60,58 @@ int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThr
 		if (evalNum == 4)
 			return evalTie(currentState, depth);
 	}
-		
+
 
 	listStates = createNewState(currentState, currentPlayer);
-	if(listStates.size() == 0)
-		return 
+	if (listStates.size() == 0)
+		return bestScore;
 	for (int i = 0; i < listStates.size(); i++) {
-		if (listStates) {
-			resultSucc = minimaxAB(newState, depth + 1, pos, opposite(player), -passThresh, -useThresh)
-				
-				//b (set newState to -resultSucc)
-				newState[i] = -resultSucc;
-				
-				//c
-				if(newState[i] > passThresh){
-					//i
-					passThresh = listStates[i];
-					//ii
-					//set bestpath to result of attching succ to front of path(result succ)
-					bestScore = resultSucc;
-				}
-				
-				//d
-				if(passThresh >= useThresh)
-					return bestScore;
-				
+		for (int x = 0; x < listStates[i].size(); x++)
+			newState.push_back(listStates[i][x]);
+		resultSucc = minimaxAB(newState, depth + 1, opposite(currentPlayer), -passThresh, -useThresh, evalNum);
+
+		//b (set newState to -resultSucc)
+		newValue = -resultSucc;
+
+		//c
+		if (newValue > passThresh) {
+			//i
+			passThresh = newValue;
+			//ii
+			//set bestpath to result of attching succ to front of path(result succ)
+			bestScore = passThresh;
 		}
+
+		//d
+		if (passThresh >= useThresh)
+			return bestScore;
 	}
 
 	return bestScore;
 }
 
 int opposite(int player) {
-    return -player;
+	return -player;
 }
 
 // G(currentState, player) --> listStates
 // Return a list of states that can be taken by current player
-vector<int, int> createNewState(vector<int> currentState, int player) {
-	vector<int, int> listStates;
-	// get number of empty positions (0) --> numEmpty
-	
-	// for i = 0; i < numEmpty do
-		// create copy of currentState --> newState
-		// Insert player into newState[numEmptyPos(i)] --> newState
-		// push newState into listStates (listStates.push(newStates))
-	
+vector<vector<int>, int> createNewState(vector<int> currentState, int player) {
+	vector<vector<int>, int> listStates;
+	vector<int> emptyPos;
+	vector<int> moveState;
+
+	for (int i = 0; i < currentState.size(); i++) {
+		if (currentState[i] == 0)
+			emptyPos.push_back(i);
+	}
+
+	for (int i = 0; i < emptyPos.size(); i++) {
+		moveState = currentState;
+		moveState[emptyPos[i]] = player;
+		listStates.push_back(moveState);
+	}
+
 	return listStates;
 }
 
@@ -218,5 +225,13 @@ int evalTie(vector<int> currentState, int player) {
 	}
 	return score;
 }
- // -1 = O
- // 1 = X
+// -1 = O
+// 1 = X
+
+// X = 1
+// O = -1
+int main() {
+	vector<int> currentState = { 0, -1, 1, -1, 0, 0, 1, -1, 0 };
+
+	return 0;
+}
