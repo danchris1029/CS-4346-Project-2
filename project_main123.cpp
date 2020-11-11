@@ -28,7 +28,7 @@ D.	Return the structure (5.)
 */
 
 int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum);
-vector<vector<int>, int> createNewState(vector<int> currentState, int player);
+vector<vector<int> > createNewState(vector<int> currentState, int player);
 int opposite(int player);
 int firstMinusOpp(vector<int> currentState, int player);
 int cornAndMid(vector<int> currentState, int player);
@@ -48,7 +48,7 @@ int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThr
 		newValue;
 	vector<int> newState;
 	int table[4];
-	vector<vector<int>, int> listStates;
+	vector<vector<int> > listStates;
 
 	if (depth > 9) {
 		if (evalNum == 1)
@@ -66,8 +66,8 @@ int minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThr
 	if (listStates.size() == 0)
 		return bestScore;
 	for (int i = 0; i < listStates.size(); i++) {
-		for (int x = 0; x < listStates[i].size(); x++)
-			newState.push_back(listStates[i][x]);
+		newState = listStates.at(i);
+
 		resultSucc = minimaxAB(newState, depth + 1, opposite(currentPlayer), -passThresh, -useThresh, evalNum);
 
 		//b (set newState to -resultSucc)
@@ -96,8 +96,8 @@ int opposite(int player) {
 
 // G(currentState, player) --> listStates
 // Return a list of states that can be taken by current player
-vector<vector<int>, int> createNewState(vector<int> currentState, int player) {
-	vector<vector<int>, int> listStates;
+vector<vector<int> > createNewState(vector<int> currentState, int player) {
+	vector<vector<int> > listStates;
 	vector<int> emptyPos;
 	vector<int> moveState;
 
@@ -144,7 +144,7 @@ int firstMinusOpp(vector<int> currentState, int player) {
 
 	// Check rows and colomns
 	for (int i = 0; i < 3; i++) {
-		//rows 
+		//rows
 		if (currentState[i * 3] != (player) && currentState[(i * 3) + 1] != (player) &&
 			currentState[(i * 3) + 2] != (player))
 			player2++;
@@ -170,7 +170,7 @@ int firstMinusOpp(vector<int> currentState, int player) {
 int cornAndMid(vector<int> currentState, int player) {
 	int score = 0;
 
-	// Check rows and colomns	
+	// Check rows and colomns
 	for (int i = 0; i <= 8; i = i + 2) {
 		if (currentState[i] == player) {
 			score++;
