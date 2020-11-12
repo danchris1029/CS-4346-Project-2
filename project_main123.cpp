@@ -36,7 +36,7 @@ struct statStruct {
    	totalExpandedNodes = 0,
   	newValue = 0;
 };
-statStruct minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct metrics);
+statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics);
 vector<vector<int> > createNewState(vector<int> currentState, int player);
 int opposite(int player);
 int firstMinusOpp(vector<int> currentState, int player);
@@ -49,19 +49,26 @@ int evalTie(vector<int> currentState, int player);
 // O = -1
 int main() {
 
-	vector<int> currentState{ 1, -1, 1, -1, 0, 0, 1, -1, 0 };
+	vector<int> currentState{ 0, -1, 1, -1, 0, 0, 1, -1, 0 };
 
-    statStruct metrics;
+    statStruct* metrics = new statStruct;
 
-    statStruct bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
-    cout << "Best Value E1 " << bestValue.bestScore << " Total # of nodes " << bestValue.totalNumberNodes << " Total Expanded nodes " << bestValue.totalExpandedNodes << endl;
+    statStruct* bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+    cout << "Best Value E1 " << bestValue->bestScore << " Total # of nodes " << bestValue->totalNumberNodes << " Total Expanded nodes " << bestValue->totalExpandedNodes << endl;
+    metrics = new statStruct;
+    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
-    cout << "Best Value E2 " << bestValue.bestScore << " Total # of nodes " << metrics.totalNumberNodes << " Total Expanded nodes " << metrics.totalExpandedNodes  << endl;
+    cout << "Best Value E2 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
+    metrics = new statStruct;
+    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 3, metrics);
-    cout << "Best Value E3 " << bestValue.bestScore << " Total # of nodes " << metrics.totalNumberNodes << " Total Expanded nodes " << metrics.totalExpandedNodes  << endl;
+    cout << "Best Value E3 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
+    metrics = new statStruct;
+    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 4, metrics);
-    cout << "Best Value E4 " << bestValue.bestScore << " Total # of nodes " << metrics.totalNumberNodes << " Total Expanded nodes " << metrics.totalExpandedNodes  << endl;
+    cout << "Best Value E4 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
 
+    delete metrics;
 
 	return 0;
 }
@@ -72,7 +79,7 @@ int main() {
 // return total number of nodes expanded
 // useThresh = alpha
 // passThresh = beta
-statStruct minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct metrics) {
+statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
 	/*int bestScore = 0,
 		resultSucc = 0,
 		lengthGamePath = 0,
@@ -86,49 +93,54 @@ statStruct minimaxAB(vector<int> currentState, int depth, int currentPlayer, int
 
 	if (depth > 9) {
 		if (evalNum == 1){
-		    metrics.bestScore = firstMinusOpp(currentState, currentPlayer);
+		    metrics->bestScore = firstMinusOpp(currentState, currentPlayer);
 			return metrics;
 			}
 		if (evalNum == 2){
-		    metrics.bestScore = cornAndMid(currentState, currentPlayer);
+		    metrics->bestScore = cornAndMid(currentState, currentPlayer);
 			return metrics;
 			}
 		if (evalNum == 3){
-		    metrics.bestScore = proximityEval(currentState, currentPlayer);
+		    metrics->bestScore = proximityEval(currentState, currentPlayer);
 			return metrics;
 			}
 		if (evalNum == 4){
-		    metrics.bestScore = evalTie(currentState, currentPlayer);
+		    metrics->bestScore = evalTie(currentState, currentPlayer);
 			return metrics;
 			}
 	}
 
+    //cout << "Best Score Out " << metrics.bestScore << endl;
 
 	listStates = createNewState(currentState, currentPlayer);
 	if (listStates.size() == 0) {
 		if (evalNum == 1){
-		    metrics.bestScore = firstMinusOpp(currentState, currentPlayer);
+		    metrics->bestScore = firstMinusOpp(currentState, currentPlayer);
+		    cout << "Best Score E1 " << metrics->bestScore << endl;
 			return metrics;
 			}
 		if (evalNum == 2){
-		    metrics.bestScore = cornAndMid(currentState, currentPlayer);
+		    metrics->bestScore = cornAndMid(currentState, currentPlayer);
+		    cout << "Best Score E2 " << metrics->bestScore << endl;
 			return metrics;
 			}
 		if (evalNum == 3){
-		    metrics.bestScore = proximityEval(currentState, currentPlayer);
+		    metrics->bestScore = proximityEval(currentState, currentPlayer);
+		    cout << "Best Score E3 " << metrics->bestScore << endl;
 			return metrics;
 			}
 		if (evalNum == 4){
-		    metrics.bestScore = evalTie(currentState, currentPlayer);
+		    metrics->bestScore = evalTie(currentState, currentPlayer);
+		    cout << "Best Score E4 " << metrics->bestScore << endl;
 			return metrics;
 			}
 	}
 	
 	//cout << "1) PT " << passThresh << " UT " << useThresh << endl;
 	
-	metrics.totalExpandedNodes += 1;
+	metrics->totalExpandedNodes += 1;
 	
-	metrics.totalNumberNodes += listStates.size();
+	metrics->totalNumberNodes += listStates.size();
 	
 	//cout << "Loop " << evalNum << endl;
 	
@@ -141,15 +153,15 @@ statStruct minimaxAB(vector<int> currentState, int depth, int currentPlayer, int
         //cout << "Result Succ " << metrics.resultSucc << endl;
         
 		//b (set newState to -resultSucc)
-		metrics.newValue = -metrics.resultSucc;
+		metrics->newValue = -metrics->resultSucc;
 
 		//c
-		if (metrics.newValue > passThresh) {
+		if (metrics->newValue > passThresh) {
 			//i
-			passThresh = metrics.newValue;
+			passThresh = metrics->newValue;
 			//ii
 			//set bestpath to result of attching succ to front of path(result succ)
-			metrics.bestScore = passThresh;
+			metrics->bestScore = passThresh;
 		}
 
         //cout << "2) PT " << passThresh << " UT " << useThresh << endl;
