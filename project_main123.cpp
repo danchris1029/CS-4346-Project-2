@@ -49,12 +49,14 @@ int evalTie(vector<int> currentState, int player);
 // O = -1
 int main() {
 
-	vector<int> currentState{ 0, -1, 1, -1, 0, 0, 1, -1, 0 };
+	vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
 	
 	/*
 	
-	
-	
+1 | 0 | 1
+-1 | 1  | 0
+0 | -1 | -1
+
 	
 	*/
 
@@ -126,22 +128,22 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 	if (listStates.size() == 0) {
 		if (evalNum == 1){
 		    metrics->bestScore = firstMinusOpp(currentState, currentPlayer);
-		    cout << "Best Score E1 " << metrics->bestScore << endl;
+		    //cout << "Best Score E1 " << metrics->bestScore << endl;
 			return metrics;
 			}
 		if (evalNum == 2){
 		    metrics->bestScore = cornAndMid(currentState, currentPlayer);
-		    cout << "Best Score E2 " << metrics->bestScore << endl;
+		    //cout << "Best Score E2 " << metrics->bestScore << endl;
 			return metrics;
 			}
 		if (evalNum == 3){
 		    metrics->bestScore = proximityEval(currentState, currentPlayer);
-		    cout << "Best Score E3 " << metrics->bestScore << endl;
+		    //cout << "Best Score E3 " << metrics->bestScore << endl;
 			return metrics;
 			}
 		if (evalNum == 4){
 		    metrics->bestScore = evalTie(currentState, currentPlayer);
-		    cout << "Best Score E4 " << metrics->bestScore << endl;
+		    //cout << "Best Score E4 " << metrics->bestScore << endl;
 			return metrics;
 			}
 	}
