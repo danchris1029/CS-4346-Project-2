@@ -36,6 +36,7 @@ struct statStruct {
    	totalExpandedNodes = 0,
   	newValue = 0;
 };
+
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics);
 vector<vector<int> > createNewState(vector<int> currentState, int player);
 int opposite(int player);
@@ -43,7 +44,8 @@ int firstMinusOpp(vector<int> currentState, int player);
 int cornAndMid(vector<int> currentState, int player);
 int proximityEval(vector<int> currentState, int player);
 int evalTie(vector<int> currentState, int player);
-
+int getBestScores(vector<int> currentState, int currentPlayer, int evalNum);
+bool checkWin(vector<int> currentState);
 
 // X = 1
 // O = -1
@@ -92,80 +94,42 @@ int main() {
 // useThresh = alpha
 // passThresh = beta
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
-	/*int bestScore = 0,
-		resultSucc = 0,
-		lengthGamePath = 0,
-		totalNumberNodes = 0,
-		totalExpandedNodes = 0,
-		newValue = 0;*/
 	
 	vector<int> newState;
 	int table[4];
 	vector<vector<int> > listStates;
 
+    // Checks for depth requirement
 	if (depth > 9) {
-		if (evalNum == 1){
-		    metrics->bestScore = firstMinusOpp(currentState, currentPlayer);
-			return metrics;
-			}
-		if (evalNum == 2){
-		    metrics->bestScore = cornAndMid(currentState, currentPlayer);
-			return metrics;
-			}
-		if (evalNum == 3){
-		    metrics->bestScore = proximityEval(currentState, currentPlayer);
-			return metrics;
-			}
-		if (evalNum == 4){
-		    metrics->bestScore = evalTie(currentState, currentPlayer);
-			return metrics;
-			}
-	}
+		metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		return metrics;
+		}
 
-    //cout << "Best Score Out " << metrics.bestScore << endl;
-
+    /// Generates a list of states and evalutes the values of those states
 	listStates = createNewState(currentState, currentPlayer);
 	if (listStates.size() == 0) {
-		if (evalNum == 1){
-		    metrics->bestScore = firstMinusOpp(currentState, currentPlayer);
-		    //cout << "Best Score E1 " << metrics->bestScore << endl;
-			return metrics;
-			}
-		if (evalNum == 2){
-		    metrics->bestScore = cornAndMid(currentState, currentPlayer);
-		    //cout << "Best Score E2 " << metrics->bestScore << endl;
-			return metrics;
-			}
-		if (evalNum == 3){
-		    metrics->bestScore = proximityEval(currentState, currentPlayer);
-		    //cout << "Best Score E3 " << metrics->bestScore << endl;
-			return metrics;
-			}
-		if (evalNum == 4){
-		    metrics->bestScore = evalTie(currentState, currentPlayer);
-		    //cout << "Best Score E4 " << metrics->bestScore << endl;
-			return metrics;
-			}
+        metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		return metrics;
 	}
+	
+	/// Checks if the current state is a win
+	if(checkWin(currentState)){
+        metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		return metrics;
+    }
 	
 	metrics->totalExpandedNodes += 1;
 	
 	metrics->totalNumberNodes += listStates.size();
-	
-	//cout << "List States " << listStates.size() << endl;
-	
+		
 	for (int i = 0; i < listStates.size(); i++) {
 	
 		newState = listStates.at(i);	
         
 		metrics = minimaxAB(newState, depth + 1, opposite(currentPlayer), -passThresh, -useThresh, evalNum, metrics);
-        
-        //cout << "Return Max " << metrics->bestScore << endl;
-        
-		//b (set newState to -resultSucc)
+                
+		//b
 		metrics->newValue = -metrics->bestScore;
-
-        //cout << "PassThres " << passThresh << " useThresh " << useThresh << " metrics new value " << metrics->newValue << endl;
 
 		//c
 		if (metrics->newValue > passThresh) {
@@ -183,12 +147,61 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 		}
 	}
 
-	//cout << "Final Score " << metrics->bestScore << endl << endl;
 	return metrics;
 }
 
+// Switches the current player
 int opposite(int player) {
 	return -player;
+}
+
+// Calculates the best score
+int getBestScores(vector<int> currentState, int currentPlayer, int evalNum){
+    if (evalNum == 1)
+		return firstMinusOpp(currentState, currentPlayer);
+	if (evalNum == 2)
+		return cornAndMid(currentState, currentPlayer);
+	if (evalNum == 3)
+		return proximityEval(currentState, currentPlayer);
+	if (evalNum == 4)
+		return evalTie(currentState, currentPlayer);
+    else
+        return 0;
+}
+
+// Checks if the current state is a win
+bool checkWin(vector<int> currentState){
+    // Check if the current state is a win by rows
+    for (int index = 0; index < 9; index += 3){
+        if (currentState[index] == 1 && currentState[index + 1] == 1 && currentState[index + 2] == 1)
+            return true;
+        if (currentState[index] == -1 && currentState[index + 1] == -1 && currentState[index + 2] == -1)
+            return true;
+    }
+    
+    // Check if the current state is a win by columns
+    for (int index = 0; index < 3; index++){
+        if (currentState[index] == 1 && currentState[index + 3] == 1 && currentState[index + 6] == 1)
+            return true;
+        if (currentState[index] == -1 && currentState[index + 3] == -1 && currentState[index + 6] == -1)
+            return true;
+    }
+	
+	// Check if the current state is a win by diagnols
+    for (int index = 0; index < 4; index += 2){
+        if (index == 0 && currentState[index] == 1 && currentState[index + 4] == 1 && currentState[index + 8] == 1)
+            return true;
+        if (index == 0 && currentState[index] == -1 && currentState[index + 4] == -1 && currentState[index + 8] == -1)
+            return true;
+        if (index == 2 && currentState[index] == 1 && currentState[index + 2] == 1 && currentState[index + 4] == 1)
+            return true;
+        if (index == 2 && currentState[index] == -1 && currentState[index + 2] == -1 && currentState[index + 4] == -1)
+            return true;
+
+    }
+
+    return false;
+
 }
 
 // G(currentState, player) --> listStates
@@ -259,7 +272,6 @@ int firstMinusOpp(vector<int> currentState, int player) {
 			player2++;
 	}
 
-    //cout << "E1 = " << player1 - player2 << endl;
 
 	return player1 - player2;
 }
@@ -271,13 +283,11 @@ int cornAndMid(vector<int> currentState, int player) {
 
 	// Check rows and colomns
 	for (int i = 0; i <= 8; i = i + 2) {
-	    //cout << "current state " << currentState[i] << " Player " << player << endl;
 		if (currentState.at(i) == player) {
 			score++;
 		}
 	}
 
-    //cout << "E2 = " << score << endl;
 
 	return score;
 }
@@ -302,8 +312,6 @@ int proximityEval(vector<int> currentState, int player) {
 		else if (currentState[index] == -player && currentState[index - 3] == player)
 			scoreOtherPlayer -= 1;
 	}
-
-    //cout << "E3 = " << scorePlayer - scoreOtherPlayer << endl;
      
 	return(scorePlayer - scoreOtherPlayer);
 
@@ -327,9 +335,7 @@ int evalTie(vector<int> currentState, int player) {
 		else if (currentState[i] == player && currentState[i + 1] == (-player) && currentState[i + 2] == player)
 			score++;
 	}
-	
-	//cout << "E4 = " << score << endl;
-	
+		
 	return score;
 }
 // -1 = O
