@@ -95,14 +95,15 @@ int main() {
 // passThresh = beta
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
 	
-	cout << "Current State & depth " << depth << endl << endl;
+	/*cout << "Current State & depth " << depth << endl << endl;
 	
 	for(int index = 0; index < 9; index+=3){
 	    cout << currentState[index] << " | " << currentState[index + 1] << " | " << currentState[index + 2] << endl;
 	}
 	
 	cout << endl;
-	
+   */
+
 	vector<int> newState;
 	int table[4];
 	vector<vector<int> > listStates;
@@ -165,6 +166,7 @@ int opposite(int player) {
 
 // Calculates the best score
 int getBestScores(vector<int> currentState, int currentPlayer, int evalNum){
+    cout << "Calculating" << endl;
     if (evalNum == 1)
 		return firstMinusOpp(currentState, currentPlayer);
 	if (evalNum == 2)
@@ -226,7 +228,7 @@ vector<vector<int> > createNewState(vector<int> currentState, int player) {
 
 	for (int i = 0; i < emptyPos.size(); i++) {
 		moveState = currentState;
-		moveState[emptyPos[i]] = player;
+		moveState[emptyPos[i]] = opposite(player);
 		listStates.push_back(moveState);
 	}
 
