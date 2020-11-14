@@ -69,7 +69,7 @@ int main() {
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
     cout << "Metrics Value E1 " << metrics->bestScore << " Best Value E1 " << bestValue->bestScore << " Total # of nodes " << bestValue->totalNumberNodes << " Total Expanded nodes " << bestValue->totalExpandedNodes << endl;
     metrics = new statStruct;
-    
+/*    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
     cout << "Metrics Value E2 " << metrics->bestScore << " Best Value E2 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
     metrics = new statStruct;
@@ -80,7 +80,7 @@ int main() {
     
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 4, metrics);
     cout << "Metrics Value E4 " << metrics->bestScore << " Best Value E4 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
-
+*/
     delete metrics;
     //delete bestValue;
 
@@ -94,6 +94,14 @@ int main() {
 // useThresh = alpha
 // passThresh = beta
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
+	
+	cout << "Current State & depth " << depth << endl << endl;
+	
+	for(int index = 0; index < 9; index+=3){
+	    cout << currentState[index] << " | " << currentState[index + 1] << " | " << currentState[index + 2] << endl;
+	}
+	
+	cout << endl;
 	
 	vector<int> newState;
 	int table[4];
