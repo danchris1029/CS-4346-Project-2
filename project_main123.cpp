@@ -35,7 +35,10 @@ struct statStruct {
    	lengthGamePath = 0,
    	totalNumberNodes = 1,
    	totalExpandedNodes = 0,
-  	newValue = 0;
+  	newValue = 0,
+    wins = 0,
+    losses = 0,
+    recurse = 0;
 };
 
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics);
@@ -46,7 +49,7 @@ int cornAndMid(vector<int> currentState, int player);
 int proximityEval(vector<int> currentState, int player);
 int evalTie(vector<int> currentState, int player);
 int getBestScores(vector<int> currentState, int currentPlayer, int evalNum);
-bool checkWin(vector<int> currentState);
+int checkWin(vector<int> currentState);
 
 // X = 1
 // O = -1
@@ -54,10 +57,10 @@ int main() {
 
     /* Time function returns the time since the  
         Epoch(jan 1 1970). Returned time is in seconds. */
-    time_t start, end; 
+    clock_t start, end; 
 
 	vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
-	
+
 	/*
 	
 1 | 0 | 1
@@ -71,24 +74,44 @@ int main() {
  
     statStruct* bestValue = new statStruct;
 
-    /* You can call it like this : start = time(NULL); 
-     in both the way start contain total time in seconds  
-     since the Epoch. */
-    time(&start); 
-     
+    // Start Timer
+    start = clock();  
+    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+            
+    // End Timer
+    end = clock(); 
+        
+    // Printing Metric:
+    // Total length of the game path
+    // Total # of nodes generated
+    // Total # of nodes expanded
+    // Execution Time
+    // Memory Utilized
+    // Winning/losing statistics
+    cout << "Metrics for evaluation function E1:" << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl;
+    cout << "Memory Utilized " << sizeof(bestValue) + ((20 + 24  + 92 + 72 + 48) * bestValue->recurse) << " bytes" << endl;
     
-    // Recording end time. 
-    time(&end); 
-  
-    // Calculating total time taken by the program. 
-    double time_taken = double(end - start); 
-    cout << "Time taken by program is : " << fixed << time_taken << setprecision(5); 
-    cout << " sec " << endl; 
+    /* 
     
-    cout << "Metrics Value E1 " << " Total # of nodes " << bestValue->totalNumberNodes << " Total Expanded nodes " << bestValue->totalExpandedNodes << endl;
-    metrics = new statStruct;
-/*    
+    Size of metrics struct (constant)
+    Size of values passed every call to minimax (5 - integers and one vector<int>)
+    Size of all other values
+
+
+    (sizeof(bestValue) + 20 + 24 ) + 92 + 72 + 48
+    
+    */
+    
+    
+    
+/*    metrics = new statStruct;
+    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
     cout << "Metrics Value E2 " << metrics->bestScore << " Best Value E2 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
     metrics = new statStruct;
@@ -123,8 +146,9 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 	cout << endl;
    */
 
+    metrics->recurse += 1;
+
 	vector<int> newState;
-	int table[4];
 	vector<vector<int> > listStates;
 
     // Checks for depth requirement
@@ -140,11 +164,19 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 		return metrics;
 	}
 	
-	/// Checks if the current state is a win
-	if(checkWin(currentState)){
+	/// Checks if the current state is a win for current player
+	if(checkWin(currentState) == 1){
+	    metrics->wins += 1;
         metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
 		return metrics;
     }
+    /// Checks if the current state is a win for the opposing player
+	else if(checkWin(currentState) == -1){
+	    metrics->losses += 1;
+        metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		return metrics;
+    }
+
 	
 	metrics->totalExpandedNodes += 1;
 	
@@ -185,7 +217,7 @@ int opposite(int player) {
 
 // Calculates the best score
 int getBestScores(vector<int> currentState, int currentPlayer, int evalNum){
-    cout << "Calculating" << endl;
+    //cout << "Calculating" << endl;
     if (evalNum == 1)
 		return firstMinusOpp(currentState, currentPlayer);
 	if (evalNum == 2)
@@ -199,37 +231,37 @@ int getBestScores(vector<int> currentState, int currentPlayer, int evalNum){
 }
 
 // Checks if the current state is a win
-bool checkWin(vector<int> currentState){
+int checkWin(vector<int> currentState){
     // Check if the current state is a win by rows
     for (int index = 0; index < 9; index += 3){
         if (currentState[index] == 1 && currentState[index + 1] == 1 && currentState[index + 2] == 1)
-            return true;
+            return 1;
         if (currentState[index] == -1 && currentState[index + 1] == -1 && currentState[index + 2] == -1)
-            return true;
+            return -1;
     }
     
     // Check if the current state is a win by columns
     for (int index = 0; index < 3; index++){
         if (currentState[index] == 1 && currentState[index + 3] == 1 && currentState[index + 6] == 1)
-            return true;
+            return 1;
         if (currentState[index] == -1 && currentState[index + 3] == -1 && currentState[index + 6] == -1)
-            return true;
+            return -1;
     }
 	
 	// Check if the current state is a win by diagnols
     for (int index = 0; index < 4; index += 2){
         if (index == 0 && currentState[index] == 1 && currentState[index + 4] == 1 && currentState[index + 8] == 1)
-            return true;
+            return 1;
         if (index == 0 && currentState[index] == -1 && currentState[index + 4] == -1 && currentState[index + 8] == -1)
-            return true;
+            return -1;
         if (index == 2 && currentState[index] == 1 && currentState[index + 2] == 1 && currentState[index + 4] == 1)
-            return true;
+            return 1;
         if (index == 2 && currentState[index] == -1 && currentState[index + 2] == -1 && currentState[index + 4] == -1)
-            return true;
+            return -1;
 
     }
 
-    return false;
+    return 0;
 
 }
 
