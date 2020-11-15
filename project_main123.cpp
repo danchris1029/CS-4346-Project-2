@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -24,7 +25,6 @@ C. Check if the ply is empty
 				return the structure
 					VALUE= Pass-Thresh;
 					PATH= BEST-PATH;
-
 D.	Return the structure (5.)
 		VALUE = Pass-Thresh
 		PATH = BEST-PATH
@@ -55,33 +55,32 @@ int checkWin(vector<int> currentState);
 // O = -1
 int main() {
 
-    /* Time function returns the time since the  
+    /* Time function returns the time since the
         Epoch(jan 1 1970). Returned time is in seconds. */
-    clock_t start, end; 
+    clock_t start, end;
 
-	vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
+		vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
 
 	/*
-	
+
 1 | 0 | 1
 -1 | 1  | 0
 0 | -1 | -1
 
-	
 	*/
 
     statStruct* metrics = new statStruct;
- 
+
     statStruct* bestValue = new statStruct;
 
     // Start Timer
-    start = clock();  
-    
+    start = clock();
+
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
-            
+
     // End Timer
-    end = clock(); 
-        
+    end = clock();
+
     // Printing Metric:
     // Total length of the game path
     // Total # of nodes generated
@@ -98,29 +97,27 @@ int main() {
     cout << "Losing boards encountered: " << bestValue->losses << endl;
     //cout << "Memory Utilized " << (sizeof(bestValue) + ((20 + 24  + 92 + 72 + 48) * bestValue->recurse)) * 100 << " kilobytes" << endl;
 
-    /* 
-    
+    /*
+
     Size of metrics struct (constant)
     Size of values passed every call to minimax (5 - integers and one vector<int>)
     Size of all other values
-
-
     (sizeof(bestValue) + 20 + 24 ) + 92 + 72 + 48
-    
+
     */
-    
-    
-    
+
+
+
 /*    metrics = new statStruct;
-    
+
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
     cout << "Metrics Value E2 " << metrics->bestScore << " Best Value E2 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
     metrics = new statStruct;
-    
+
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 3, metrics);
     cout << "Metrics Value E3 " << metrics->bestScore << " Best Value E3 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
     metrics = new statStruct;
-    
+
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 4, metrics);
     cout << "Metrics Value E4 " << metrics->bestScore << " Best Value E4 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
 */
@@ -137,15 +134,15 @@ int main() {
 // useThresh = alpha
 // passThresh = beta
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
-	
-	cout << "Current State & depth " << depth << endl << endl;
-	
-	for(int index = 0; index < 9; index+=3){
-	    cout << currentState[index] << " | " << currentState[index + 1] << " | " << currentState[index + 2] << endl;
-	}
-	
-	cout << endl;
+	ofstream fileOUT("filename.txt", ios::app); // open file to append
+	fileOUT << "Current State & depth " << depth << endl << endl;
 
+	for(int index = 0; index < 9; index+=3){
+	    fileOUT << currentState[index] << " | " << currentState[index + 1] << " | " << currentState[index + 2] << endl;
+	}
+
+	fileOUT << endl;
+	fileOUT.close();// close the file
 
     metrics->recurse += 1;
 
@@ -164,7 +161,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
         metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
 		return metrics;
 	}
-	
+
 	/// Checks if the current state is a win for current player
 	if(checkWin(currentState) == 1){
 	    metrics->wins += 1;
@@ -178,17 +175,17 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 		return metrics;
     }
 
-	
+
 	metrics->totalExpandedNodes += 1;
-	
+
 	metrics->totalNumberNodes += listStates.size();
-	
+
 	for (int i = 0; i < listStates.size(); i++) {
-	
-		newState = listStates.at(i);	
-        
+
+		newState = listStates.at(i);
+
 		metrics = minimaxAB(newState, depth + 1, opposite(currentPlayer), -passThresh, -useThresh, evalNum, metrics);
-                
+
 		//b
 		metrics->newValue = -metrics->bestScore;
 
@@ -207,7 +204,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 		}
 		metrics->lengthGamePath += 1;
 	}
-    
+
 	return metrics;
 }
 
@@ -239,7 +236,7 @@ int checkWin(vector<int> currentState){
         if (currentState[index] == -1 && currentState[index + 1] == -1 && currentState[index + 2] == -1)
             return -1;
     }
-    
+
     // Check if the current state is a win by columns
     for (int index = 0; index < 3; index++){
         if (currentState[index] == 1 && currentState[index + 3] == 1 && currentState[index + 6] == 1)
@@ -247,7 +244,7 @@ int checkWin(vector<int> currentState){
         if (currentState[index] == -1 && currentState[index + 3] == -1 && currentState[index + 6] == -1)
             return -1;
     }
-	
+
 	// Check if the current state is a win by diagnols
     for (int index = 0; index < 4; index += 2){
         if (index == 0 && currentState[index] == 1 && currentState[index + 4] == 1 && currentState[index + 8] == 1)
@@ -373,7 +370,7 @@ int proximityEval(vector<int> currentState, int player) {
 		else if (currentState[index] == -player && currentState[index - 3] == player)
 			scoreOtherPlayer -= 1;
 	}
-     
+
 	return(scorePlayer - scoreOtherPlayer);
 
 }
@@ -396,9 +393,8 @@ int evalTie(vector<int> currentState, int player) {
 		else if (currentState[i] == player && currentState[i + 1] == (-player) && currentState[i + 2] == player)
 			score++;
 	}
-		
+
 	return score;
 }
 // -1 = O
 // 1 = X
-
