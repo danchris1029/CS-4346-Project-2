@@ -1,6 +1,7 @@
 #include <vector>
+#include <cstdlib>
+#include <iomanip>
 #include <iostream>
-#include <cstdlib> 
 
 using namespace std;
 
@@ -51,6 +52,10 @@ bool checkWin(vector<int> currentState);
 // O = -1
 int main() {
 
+    /* Time function returns the time since the  
+        Epoch(jan 1 1970). Returned time is in seconds. */
+    time_t start, end; 
+
 	vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
 	
 	/*
@@ -65,9 +70,23 @@ int main() {
     statStruct* metrics = new statStruct;
  
     statStruct* bestValue = new statStruct;
- 
+
+    /* You can call it like this : start = time(NULL); 
+     in both the way start contain total time in seconds  
+     since the Epoch. */
+    time(&start); 
+     
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
-    cout << "Metrics Value E1 " << metrics->bestScore << " Best Value E1 " << bestValue->bestScore << " Total # of nodes " << bestValue->totalNumberNodes << " Total Expanded nodes " << bestValue->totalExpandedNodes << endl;
+    
+    // Recording end time. 
+    time(&end); 
+  
+    // Calculating total time taken by the program. 
+    double time_taken = double(end - start); 
+    cout << "Time taken by program is : " << fixed << time_taken << setprecision(5); 
+    cout << " sec " << endl; 
+    
+    cout << "Metrics Value E1 " << " Total # of nodes " << bestValue->totalNumberNodes << " Total Expanded nodes " << bestValue->totalExpandedNodes << endl;
     metrics = new statStruct;
 /*    
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
