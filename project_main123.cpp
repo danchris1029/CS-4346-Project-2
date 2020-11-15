@@ -90,13 +90,14 @@ int main() {
     // Memory Utilized
     // Winning/losing statistics
     cout << "Metrics for evaluation function E1:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
     cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
     cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
     cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
     cout << "Winning boards encountered: " << bestValue->wins << endl;
     cout << "Losing boards encountered: " << bestValue->losses << endl;
-    cout << "Memory Utilized " << sizeof(bestValue) + ((20 + 24  + 92 + 72 + 48) * bestValue->recurse) << " bytes" << endl;
-    
+    //cout << "Memory Utilized " << (sizeof(bestValue) + ((20 + 24  + 92 + 72 + 48) * bestValue->recurse)) * 100 << " kilobytes" << endl;
+
     /* 
     
     Size of metrics struct (constant)
@@ -137,14 +138,14 @@ int main() {
 // passThresh = beta
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
 	
-	/*cout << "Current State & depth " << depth << endl << endl;
+	cout << "Current State & depth " << depth << endl << endl;
 	
 	for(int index = 0; index < 9; index+=3){
 	    cout << currentState[index] << " | " << currentState[index + 1] << " | " << currentState[index + 2] << endl;
 	}
 	
 	cout << endl;
-   */
+
 
     metrics->recurse += 1;
 
@@ -155,7 +156,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 	if (depth > 9) {
 		metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
 		return metrics;
-		}
+	}
 
     /// Generates a list of states and evalutes the values of those states
 	listStates = createNewState(currentState, currentPlayer);
@@ -181,7 +182,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 	metrics->totalExpandedNodes += 1;
 	
 	metrics->totalNumberNodes += listStates.size();
-		
+	
 	for (int i = 0; i < listStates.size(); i++) {
 	
 		newState = listStates.at(i);	
@@ -202,11 +203,11 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 
 		//d
 		if (passThresh >= useThresh){
-		    
 			return metrics;
 		}
+		metrics->lengthGamePath += 1;
 	}
-
+    
 	return metrics;
 }
 
@@ -217,7 +218,6 @@ int opposite(int player) {
 
 // Calculates the best score
 int getBestScores(vector<int> currentState, int currentPlayer, int evalNum){
-    //cout << "Calculating" << endl;
     if (evalNum == 1)
 		return firstMinusOpp(currentState, currentPlayer);
 	if (evalNum == 2)
