@@ -55,31 +55,24 @@ int checkWin(vector<int> currentState);
 // O = -1
 int main() {
 
-    /* Time function returns the time since the
-        Epoch(jan 1 1970). Returned time is in seconds. */
     clock_t start, end;
-
-		vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
-
-	/*
-
-1 | 0 | 1
--1 | 1  | 0
-0 | -1 | -1
-
-	*/
+    vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
 
     statStruct* metrics = new statStruct;
 
     statStruct* bestValue = new statStruct;
 
-    // Start Timer
-    start = clock();
+    cout << endl << "************** MAX(EV1) VS MIN(EV2) **************" << endl << endl;
 
+    ofstream fileOUT;
+    fileOUT.open("generatedNodes.txt"); // open file to write
+	fileOUT << "************** MAX(EV1) VS MIN(EV2) **************" << endl << endl;
+    fileOUT << "#### MAX(EV1) ####" << endl << endl;
+    fileOUT.close();
+    
+    start = clock(); // Start Timer
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
-
-    // End Timer
-    end = clock();
+    end = clock(); // End Timer
 
     // Printing Metric:
     // Total length of the game path
@@ -88,41 +81,227 @@ int main() {
     // Execution Time
     // Memory Utilized
     // Winning/losing statistics
-    cout << "Metrics for evaluation function E1:" << endl;
+    cout << "Metrics for evaluation function Max EV1:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
+   
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    fileOUT.open("generatedNodes.txt", ios::app);
+    fileOUT << "#### MIN(EV2) ####" << endl << endl;
+    
+
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 2, metrics);
+    end = clock();
+
+    cout << "Metrics for evaluation function Min EV2:" << endl;
     cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
     cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
     cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
     cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
     cout << "Winning boards encountered: " << bestValue->wins << endl;
     cout << "Losing boards encountered: " << bestValue->losses << endl;
-    //cout << "Memory Utilized " << (sizeof(bestValue) + ((20 + 24  + 92 + 72 + 48) * bestValue->recurse)) * 100 << " kilobytes" << endl;
 
-    /*
+    cout << endl << "************** MAX(EV1) VS MIN(EV3) **************" << endl << endl;
+    
+	fileOUT << "************** MAX(EV1) VS MIN(EV3) **************" << endl << endl;
+	
+	fileOUT << "#### MAX(EV1) ####" << endl << endl;
+    
+    metrics = new statStruct;
+    bestValue = new statStruct;
 
-    Size of metrics struct (constant)
-    Size of values passed every call to minimax (5 - integers and one vector<int>)
-    Size of all other values
-    (sizeof(bestValue) + 20 + 24 ) + 92 + 72 + 48
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+    end = clock();
 
-    */
+    cout << "Metrics for evaluation function Max EV1:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
+   
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    fileOUT << "#### MIN(EV3) ####" << endl << endl;
+    
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 3, metrics);
+    end = clock();
 
+    cout << "Metrics for evaluation function Min EV3:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl;
 
+    cout << endl << "************** MAX(EV1) VS MIN(EV4) **************" << endl << endl;
+    
+	fileOUT << "************** MAX(EV1) VS MIN(EV4) **************" << endl << endl;
+	
+	fileOUT << "#### MAX(EV1) ####" << endl << endl;
+    
+    metrics = new statStruct;
+    bestValue = new statStruct;
 
-/*    metrics = new statStruct;
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+    end = clock();
 
+    cout << "Metrics for evaluation function Max EV1:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
+   
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    fileOUT << "#### MIN(EV4) ####" << endl << endl;
+    
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 4, metrics);
+    end = clock();
+
+    cout << "Metrics for evaluation function Min EV4:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl;
+
+    cout << endl << "************** MAX(EV2) VS MIN(EV3) **************" << endl << endl;
+    
+	fileOUT << "************** MAX(EV2) VS MIN(EV3) **************" << endl << endl;
+
+    fileOUT << "#### MAX(EV2) ####" << endl << endl;
+    
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    start = clock();
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
-    cout << "Metrics Value E2 " << metrics->bestScore << " Best Value E2 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
-    metrics = new statStruct;
+    end = clock();
 
+    cout << "Metrics for evaluation function Max EV2:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
+   
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    fileOUT << "#### MIN(EV3) ####" << endl << endl;
+    
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 3, metrics);
+    end = clock();
+
+    cout << "Metrics for evaluation function Min EV3:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl;
+
+    cout << endl << "************** MAX(EV2) VS MIN(EV4) **************" << endl << endl;
+    
+	fileOUT << "************** MAX(EV2) VS MIN(EV4) **************" << endl << endl;
+
+    fileOUT << "#### MAX(EV2) ####" << endl << endl;
+    
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
+    end = clock();
+
+    cout << "Metrics for evaluation function Max EV2:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
+   
+   
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    fileOUT << "#### MIN(EV4) ####" << endl << endl;
+    
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 4, metrics);
+    end = clock();
+
+    cout << "Metrics for evaluation function Min EV4:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl;
+
+    cout << endl << "************** MAX(EV3) VS MIN(EV4) **************" << endl << endl;
+    
+	fileOUT << "************** MAX(EV3) VS MIN(EV4) **************" << endl << endl;
+	
+    fileOUT << "#### MAX(EV3) ####" << endl << endl;
+    
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    start = clock();
     bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 3, metrics);
-    cout << "Metrics Value E3 " << metrics->bestScore << " Best Value E3 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
-    metrics = new statStruct;
+    end = clock();
 
-    bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 4, metrics);
-    cout << "Metrics Value E4 " << metrics->bestScore << " Best Value E4 " << bestValue->bestScore << " Total # of nodes " << metrics->totalNumberNodes << " Total Expanded nodes " << metrics->totalExpandedNodes  << endl;
-*/
+    cout << "Metrics for evaluation function Max EV3:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
+
+    metrics = new statStruct;
+    bestValue = new statStruct;
+    
+    fileOUT << "#### MIN(EV4) ####" << endl << endl;
+    
+    start = clock();
+    bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 4, metrics);
+    end = clock();
+
+    cout << "Metrics for evaluation function Min EV4:" << endl;
+    cout << "Total Length of the Game Path: " << bestValue->lengthGamePath << endl;
+    cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
+    cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
+    cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
+    cout << "Winning boards encountered: " << bestValue->wins << endl;
+    cout << "Losing boards encountered: " << bestValue->losses << endl;
+
+    fileOUT.close();// close the file
+
     delete metrics;
-    //delete bestValue;
 
 	return 0;
 }
@@ -204,7 +383,6 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 		}
 		metrics->lengthGamePath += 1;
 	}
-
 	return metrics;
 }
 
@@ -279,7 +457,6 @@ vector<vector<int> > createNewState(vector<int> currentState, int player) {
 		moveState[emptyPos[i]] = opposite(player);
 		listStates.push_back(moveState);
 	}
-
 	return listStates;
 }
 
@@ -288,7 +465,6 @@ int firstMinusOpp(vector<int> currentState, int player) {
 	int score = 0;
 	int player1 = 0;
 	int player2 = 0;
-
 
 	// Check rows and colomns
 	for (int i = 0; i < 3; i++) {
@@ -329,8 +505,6 @@ int firstMinusOpp(vector<int> currentState, int player) {
 			currentState[8 - (i * 2)] != (player))
 			player2++;
 	}
-
-
 	return player1 - player2;
 }
 
@@ -345,8 +519,6 @@ int cornAndMid(vector<int> currentState, int player) {
 			score++;
 		}
 	}
-
-
 	return score;
 }
 
@@ -370,7 +542,6 @@ int proximityEval(vector<int> currentState, int player) {
 		else if (currentState[index] == -player && currentState[index - 3] == player)
 			scoreOtherPlayer -= 1;
 	}
-
 	return(scorePlayer - scoreOtherPlayer);
 
 }
@@ -393,8 +564,5 @@ int evalTie(vector<int> currentState, int player) {
 		else if (currentState[i] == player && currentState[i + 1] == (-player) && currentState[i + 2] == player)
 			score++;
 	}
-
 	return score;
 }
-// -1 = O
-// 1 = X
