@@ -134,7 +134,7 @@ int main() {
 // useThresh = alpha
 // passThresh = beta
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics) {
-	ofstream fileOUT("filename.txt", ios::app); // open file to append
+	ofstream fileOUT("output.txt", ios::app); // open file to append
 	fileOUT << "Current State & depth " << depth << endl << endl;
 
 	for(int index = 0; index < 9; index+=3){
