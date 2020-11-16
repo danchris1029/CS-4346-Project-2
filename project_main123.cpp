@@ -17,7 +17,8 @@ struct statStruct {
 		losses = 0,
 		recurse = 0,
 		bestScoreDepth = 0,
-		value = 0;
+		value = 0,
+		lengthUp = 0;
 	bool firstTerminalNode = false;
 };
 
@@ -28,7 +29,7 @@ int firstMinusOpp(vector<int> currentState, int player);
 int cornAndMid(vector<int> currentState, int player);
 int proximityEval(vector<int> currentState, int player);
 int evalTie(vector<int> currentState, int player);
-int getBestScores(vector<int> currentState, int currentPlayer, int evalNum);
+int getBestScores(vector<int> currentState, int currentPlayer, int evalNum, statStruct *metrics, int depth);
 int checkWin(vector<int> currentState);
 
 // X = 1
@@ -36,7 +37,7 @@ int checkWin(vector<int> currentState);
 int main() {
 
 	clock_t start, end;
-	vector<int> currentState{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
 
 	statStruct* metrics = new statStruct;
 
@@ -62,13 +63,13 @@ int main() {
 	// Memory Utilized
 	// Winning/losing statistics
 	cout << "Metrics for evaluation function Max EV1:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
 	cout << "Winning boards encountered: " << bestValue->wins << endl;
 	cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
-
+	cin.get();
 	metrics = new statStruct;
 	bestValue = new statStruct;
 
@@ -81,7 +82,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV2:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -102,7 +103,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV1:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -119,7 +120,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV3:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -140,7 +141,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV1:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -157,7 +158,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV4:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -178,7 +179,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV2:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -195,7 +196,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV3:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -216,7 +217,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV2:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -234,7 +235,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV4:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -255,7 +256,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV3:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -272,7 +273,7 @@ int main() {
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV4:" << endl;
-	cout << "Total Length of the Game Path: " << bestValue->highestDepth << endl;
+	cout << "Total Length of the Game Path: " << bestValue->bestScoreDepth << endl;
 	cout << "Total # of nodes: " << bestValue->totalNumberNodes << endl;
 	cout << "Total Expanded nodes: " << bestValue->totalExpandedNodes << endl;
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
@@ -341,11 +342,11 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 	metrics->totalNumberNodes += listStates.size();
 
 	for (int i = 0; i < listStates.size(); i++) {
-
+		metrics->lengthUp = 0;
 		newState = listStates.at(i);
 
 		metrics = minimaxAB(newState, depth + 1, opposite(currentPlayer), -passThresh, -useThresh, evalNum, metrics);
-
+		//fileOUT << "returned; LengthUp = " << metrics->lengthUp << endl << endl;
 		//b
 		metrics->newValue = -metrics->value;
 
@@ -356,15 +357,18 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 			//ii
 			//set bestpath to result of attching succ to front of path(result succ)
 			metrics->bestScore = passThresh;
-			metrics->bestScoreDepth = depth + 1;
+			metrics->bestScoreDepth = depth + metrics->lengthUp;
+			cout << "next bestScoreDepth = " << metrics->bestScoreDepth << endl;
 		}
 
 		//d
 		if (passThresh >= useThresh) {
+			metrics->lengthUp++;
 			return metrics;
 		}
 	}
 
+	metrics->lengthUp++;
 	return metrics;
 }
 
@@ -391,6 +395,7 @@ int getBestScores(vector<int> currentState, int currentPlayer, int evalNum, stat
 		metrics->firstTerminalNode = true;
 		metrics->bestScore = value;
 		metrics->bestScoreDepth = depth;
+		cout << "First bestScoreDepth = " << metrics->bestScoreDepth << endl;
 	}
 
 	return value;
