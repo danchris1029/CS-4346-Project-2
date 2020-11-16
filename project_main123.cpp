@@ -6,29 +6,6 @@
 
 using namespace std;
 
-/*
-A. If deepenough(1.)
-	return value
-B. Generate ply (2.)
-C. Check if the ply is empty
-	if empty (3.):
-		evaluate currentState
-		end
-	if not empty (4.):
-		transverse through list of created nodes --> currentNode
-			resultSucc = minmaxab(currentNode, depth+1, opposite(player), -passThresh, -useThresh, int *lastNodeNumber) (a.)
-			newValue = -resultSucc (b.)
-			if (NEW-VALUE> Pass-Thresh) (c.)
-				Set Pass-Thresh to NEW-VALUE.
-				set best-path
-			if (pass-thresh>=use-thresh)(d.)
-				return the structure
-					VALUE= Pass-Thresh;
-					PATH= BEST-PATH;
-D.	Return the structure (5.)
-		VALUE = Pass-Thresh
-		PATH = BEST-PATH
-*/
 struct statStruct {
     int bestScore = 0,
    	resultSucc = 0,
