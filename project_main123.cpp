@@ -15,7 +15,10 @@ struct statStruct {
 		newValue = 0,
 		wins = 0,
 		losses = 0,
-		recurse = 0;
+		recurse = 0,
+		bestScoreDepth = 0,
+		value = 0;
+	bool firstTerminalNode = false;
 };
 
 statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, int useThresh, int passThresh, int evalNum, statStruct* metrics);
@@ -302,35 +305,33 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 
 	metrics->recurse += 1;
 
-	if (depth > metrics->highestDepth)
-		metrics->highestDepth = depth;
 
 	vector<int> newState;
 	vector<vector<int> > listStates;
 
 	// Checks for depth requirement
 	if (depth > 9) {
-		metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		metrics->value = getBestScores(currentState, currentPlayer, evalNum, metrics, depth);
 		return metrics;
 	}
 
 	/// Generates a list of states and evalutes the values of those states
 	listStates = createNewState(currentState, currentPlayer);
 	if (listStates.size() == 0) {
-		metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		metrics->value = getBestScores(currentState, currentPlayer, evalNum, metrics, depth);
 		return metrics;
 	}
 
 	/// Checks if the current state is a win for current player
 	if (checkWin(currentState) == 1) {
 		metrics->wins += 1;
-		metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		metrics->value = getBestScores(currentState, currentPlayer, evalNum, metrics, depth);
 		return metrics;
 	}
 	/// Checks if the current state is a win for the opposing player
 	else if (checkWin(currentState) == -1) {
 		metrics->losses += 1;
-		metrics->bestScore = getBestScores(currentState, currentPlayer, evalNum);
+		metrics->value = getBestScores(currentState, currentPlayer, evalNum, metrics, depth);
 		return metrics;
 	}
 
@@ -346,7 +347,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 		metrics = minimaxAB(newState, depth + 1, opposite(currentPlayer), -passThresh, -useThresh, evalNum, metrics);
 
 		//b
-		metrics->newValue = -metrics->bestScore;
+		metrics->newValue = -metrics->value;
 
 		//c
 		if (metrics->newValue > passThresh) {
@@ -355,6 +356,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 			//ii
 			//set bestpath to result of attching succ to front of path(result succ)
 			metrics->bestScore = passThresh;
+			metrics->bestScoreDepth = depth + 1;
 		}
 
 		//d
@@ -362,6 +364,7 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 			return metrics;
 		}
 	}
+
 	return metrics;
 }
 
@@ -371,17 +374,26 @@ int opposite(int player) {
 }
 
 // Calculates the best score
-int getBestScores(vector<int> currentState, int currentPlayer, int evalNum) {
+int getBestScores(vector<int> currentState, int currentPlayer, int evalNum, statStruct *metrics, int depth) {
+
+	int value = 0;
+
 	if (evalNum == 1)
-		return firstMinusOpp(currentState, currentPlayer);
+		value = firstMinusOpp(currentState, currentPlayer);
 	if (evalNum == 2)
-		return cornAndMid(currentState, currentPlayer);
+		value = cornAndMid(currentState, currentPlayer);
 	if (evalNum == 3)
-		return proximityEval(currentState, currentPlayer);
+		value = proximityEval(currentState, currentPlayer);
 	if (evalNum == 4)
-		return evalTie(currentState, currentPlayer);
-	else
-		return 0;
+		value = evalTie(currentState, currentPlayer);
+
+	if (metrics->firstTerminalNode == false) {
+		metrics->firstTerminalNode = true;
+		metrics->bestScore = value;
+		metrics->bestScoreDepth = depth;
+	}
+
+	return value;
 }
 
 // Checks if the current state is a win
