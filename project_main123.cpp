@@ -37,7 +37,7 @@ int checkWin(vector<int> currentState);
 int main() {
 
 	clock_t start, end;
-	vector<int> currentState{ 1, 0, 1, -1, 1, 0, 0, -1, -1 };
+	vector<int> currentState{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	statStruct* metrics = new statStruct;
 
@@ -52,7 +52,7 @@ int main() {
 	fileOUT.close();
 
 	start = clock(); // Start Timer
-	bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+	bestValue = minimaxAB(currentState, 0, 1, 1000, -1000, 1, metrics);
 	end = clock(); // End Timer
 
 	// Printing Metric:
@@ -69,7 +69,7 @@ int main() {
 	cout << "Execution Time: " << fixed << double(end - start) / double(CLOCKS_PER_SEC) << setprecision(5) << " sec " << endl;
 	cout << "Winning boards encountered: " << bestValue->wins << endl;
 	cout << "Losing boards encountered: " << bestValue->losses << endl << endl << "VS" << endl << endl;
-	cin.get();
+
 	metrics = new statStruct;
 	bestValue = new statStruct;
 
@@ -78,7 +78,7 @@ int main() {
 
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 2, metrics);
+	bestValue = minimaxAB(currentState, 0, -1, 1000, -1000, 2, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV2:" << endl;
@@ -99,7 +99,7 @@ int main() {
 	bestValue = new statStruct;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+	bestValue = minimaxAB(currentState, 0, 1, 1000, -1000, 1, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV1:" << endl;
@@ -116,7 +116,7 @@ int main() {
 	fileOUT << "#### MIN(EV3) ####" << endl << endl;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 3, metrics);
+	bestValue = minimaxAB(currentState, 0, -1, 1000, -1000, 3, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV3:" << endl;
@@ -137,7 +137,7 @@ int main() {
 	bestValue = new statStruct;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 1, metrics);
+	bestValue = minimaxAB(currentState, 0, 1, 1000, -1000, 1, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV1:" << endl;
@@ -154,7 +154,7 @@ int main() {
 	fileOUT << "#### MIN(EV4) ####" << endl << endl;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 4, metrics);
+	bestValue = minimaxAB(currentState, 0, -1, 1000, -1000, 4, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV4:" << endl;
@@ -175,7 +175,7 @@ int main() {
 	bestValue = new statStruct;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
+	bestValue = minimaxAB(currentState, 0, 1, 1000, -1000, 2, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV2:" << endl;
@@ -192,7 +192,7 @@ int main() {
 	fileOUT << "#### MIN(EV3) ####" << endl << endl;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 3, metrics);
+	bestValue = minimaxAB(currentState, 0, -1, 1000, -1000, 3, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV3:" << endl;
@@ -213,7 +213,7 @@ int main() {
 	bestValue = new statStruct;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 2, metrics);
+	bestValue = minimaxAB(currentState, 0, 1, 1000, -1000, 2, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV2:" << endl;
@@ -231,7 +231,7 @@ int main() {
 	fileOUT << "#### MIN(EV4) ####" << endl << endl;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 4, metrics);
+	bestValue = minimaxAB(currentState, 0, -1, 1000, -1000, 4, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV4:" << endl;
@@ -252,7 +252,7 @@ int main() {
 	bestValue = new statStruct;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, 1, 1000, -1000, 3, metrics);
+	bestValue = minimaxAB(currentState, 0, 1, 1000, -1000, 3, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Max EV3:" << endl;
@@ -269,7 +269,7 @@ int main() {
 	fileOUT << "#### MIN(EV4) ####" << endl << endl;
 
 	start = clock();
-	bestValue = minimaxAB(currentState, 1, -1, 1000, -1000, 4, metrics);
+	bestValue = minimaxAB(currentState, 0, -1, 1000, -1000, 4, metrics);
 	end = clock();
 
 	cout << "Metrics for evaluation function Min EV4:" << endl;
@@ -358,7 +358,6 @@ statStruct* minimaxAB(vector<int> currentState, int depth, int currentPlayer, in
 			//set bestpath to result of attching succ to front of path(result succ)
 			metrics->bestScore = passThresh;
 			metrics->bestScoreDepth = depth + metrics->lengthUp;
-			cout << "next bestScoreDepth = " << metrics->bestScoreDepth << endl;
 		}
 
 		//d
@@ -395,7 +394,6 @@ int getBestScores(vector<int> currentState, int currentPlayer, int evalNum, stat
 		metrics->firstTerminalNode = true;
 		metrics->bestScore = value;
 		metrics->bestScoreDepth = depth;
-		cout << "First bestScoreDepth = " << metrics->bestScoreDepth << endl;
 	}
 
 	return value;
