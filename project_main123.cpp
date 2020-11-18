@@ -71,6 +71,7 @@ int main() {
 
 	cout << endl << "************** MAX(EV1) VS MIN(EV3) **************" << endl << endl;
 
+    fileOUT.open("generatedNodes.txt", ios::app);
 	fileOUT << "************** MAX(EV1) VS MIN(EV3) **************" << endl << endl;
 
 	metrics = new statStruct;
