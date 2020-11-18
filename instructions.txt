@@ -1,0 +1,3 @@
+In order to compile, type this line in cmd in the appropriate directory:
+
+g++ -std=c++11 project_main123.cpp
